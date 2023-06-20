@@ -36,7 +36,7 @@ router.post('/',verifyTokenAndAdmin,uploadImage ,async (req: express.Request, re
       res.status(500).json(`Cannot create the Vehicle in the handler. ${err}.`);
     }
   });
-  router.post('/addCar',verifyTokenAndAuthorization,uploadImage ,async (req: express.Request, res: express.Response) => {
+  router.post('/:id/addCar',verifyTokenAndAuthorization,uploadImage ,async (req: express.Request, res: express.Response) => {
     try {
       const vehicle: Vehicle = {
         license_id: req.body.license_id,
@@ -70,9 +70,9 @@ router.post('/',verifyTokenAndAdmin,uploadImage ,async (req: express.Request, re
     }
   });
   
-  router.get('/:id/admin', verifyTokenAndAdmin, async (req: Request, res: Response) => {
+  router.get('/:carId/admin', verifyTokenAndAdmin, async (req: Request, res: Response) => {
     try {
-      const vehicle = await operations.show(req.params.id);
+      const vehicle = await operations.show(req.params.carId);
       res.status(200).json({"vehicles":vehicle});
     } catch (error) {
       res.status(500).json(`Cannot Get the vehicle. ${error}.`);
@@ -87,7 +87,7 @@ router.post('/',verifyTokenAndAdmin,uploadImage ,async (req: express.Request, re
       res.status(500).json(`Cannot Get the User vehicles. ${error}.`);
     }
   });
-  router.put('/updateCar/:id', verifyTokenAndAuthorization,uploadImage, async (req: Request, res: Response) => {
+  router.put('/:id/updateCar/:carId', verifyTokenAndAuthorization,uploadImage, async (req: Request, res: Response) => {
     try {
       const user: Vehicle = {
         license_id: req.body.license_id,
@@ -100,11 +100,11 @@ router.post('/',verifyTokenAndAdmin,uploadImage ,async (req: express.Request, re
         manufacturering_year: req.body.manufacturering_year,
         color: req.body.color,
         is_stolen: 'safe',
-        vehicle_id:req.params.id,
+        vehicle_id:req.params.carId,
         checked:'waiting',
         vehicle_image:req.body.image,
       };
-      const newUser = await operations.update(user, req.params.id);
+      const newUser = await operations.update(user, req.params.carId);
       res.status(200).json({"vehicles":newUser});
     } catch (error) {
       res.status(500).json(`Cannot Update the vehicle. ${error}.`);
@@ -141,7 +141,7 @@ router.post('/',verifyTokenAndAdmin,uploadImage ,async (req: express.Request, re
       res.status(500).json(`Cannot Delete the vehicle. ${error}.`);
     }
   });
-  router.patch('/:carId/stolen', verifyTokenAndAuthorization, async (req: Request, res: Response) => {
+  router.patch('/:id/:carId/stolen', verifyTokenAndAuthorization, async (req: Request, res: Response) => {
     try {
       const vehicle = await operations.stolen_vehicle(req.params.carId);
       res.status(200).json({"vehicles":vehicle});
@@ -149,7 +149,7 @@ router.post('/',verifyTokenAndAdmin,uploadImage ,async (req: express.Request, re
       res.status(500).json(`Cannot Get the vehicle As Stolen. ${error}.`);
     }
   });
-  router.patch('/:carId/safe', verifyTokenAndAuthorization, async (req: Request, res: Response) => {
+  router.patch('/:id/:carId/safe', verifyTokenAndAuthorization, async (req: Request, res: Response) => {
     try {
       const vehicle = await operations.retrieved_vehicle(req.params.carId);
       res.status(200).json({"vehicles":vehicle});

@@ -108,12 +108,12 @@ is_admin:"officer",
       console.log(user.user_email);
       const u = await operations.login(user.user_email, user.user_password);
       const token = jwt.sign({ user: u }, gtoken as string);
-      let status=true;
+      let status=false;
       if(u == null){
         res.status(200).json({"status":status,"message":"You faild to login","token":token,u});
       }
       else{
-        status=false;
+        status=true;
         res.status(200).json({"status":status,"message":"You login successfully","token":token,u});
       }
       // res.status(200).json(u);
