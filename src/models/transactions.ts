@@ -112,8 +112,9 @@ export class transactionStore {
   async showUserTransactions(id: string): Promise<Transaction[]> {
     try {
       const conn = await Client.connect();
-      const sql = 'SELECT transaction_id,vehicle,fine,payment_date,payment_status,place,adjustment_date,adjustment_time,is_reported FROM transactions INNER JOIN vehicles ON transactions.vehicle = vehicles.vehicle_id INNER JOIN users ON vehicles.license = users.user_ssn WHERE users.user_ssn = $1';
-      const vehicle = await conn.query(sql, [id]);
+     const sql = 'SELECT transaction_id,vehicle,transactions.vehicle_image,fine,payment_date,payment_status,place,adjustment_date,adjustment_time,is_reported FROM transactions INNER JOIN vehicles ON transactions.vehicle = vehicles.vehicle_id INNER JOIN users ON vehicles.license = users.user_ssn WHERE users.user_ssn = $1';
+    //  const sql = 'SELECT * FROM transactions INNER JOIN vehicles ON transactions.vehicle = vehicles.vehicle_id INNER JOIN users ON vehicles.license = users.user_ssn WHERE users.user_ssn = $1'; 
+     const vehicle = await conn.query(sql, [id]);
       conn.release();
       const vehicles = vehicle.rows;
       return vehicles;
